@@ -81,14 +81,14 @@ def writeNamesToFiles(imgs, path):
         names = sep.join(imgs[item])
         if len(names) > 0 :
             print names
-            args="-xmp:PersonInImage=\""+names+"\" "+filepath
+            args={"xmp:PersonInImage":names}
             print args
 
             with exiftool.ExifTool() as et:
-                et.start()                
-                et.execute(args)
-                
-            #print metadata
+                #et.start()                
+                #et.execute(args)
+                et.set_tags(args, filepath)
+            #print write
     return
 
 
@@ -132,7 +132,10 @@ if len(sys.argv) > 1:
                 #lets see what we found:
                 #print imgs
                 #here we should write the names to the images
-                writeNamesToFiles(imgs, path)
+                try:
+                    writeNamesToFiles(imgs, path)
+                except:
+                    print "Error while saving!"
             except:
                 print "No faces saved in this file ('"+item+"')"
     else:
