@@ -9,7 +9,7 @@ import os
 import ConfigParser
 import string
 #use pyexiftool
-from lib.pyexiftool import exiftool
+from lib.pyexiftool_settags import exiftool
 
 #Found here: https://sites.google.com/site/picasafacenetwork/home
 #not tested yet
