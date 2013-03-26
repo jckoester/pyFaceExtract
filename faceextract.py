@@ -1,7 +1,7 @@
 #! /bin/python
 
 #contactsfile = "/home/jan/.wine/drive_c/users/jan/Local Settings/Application Data/Google/Picasa2/contacts/contacts.xml"
-contactsfile = "/home/jan/Dokumente/Programmieren/faceextract/test/contacts.xml"
+contactsfile = "/home/jan/Dokumente/Programmieren/pyFaceExtract/test/contacts.xml"
 
 #System environment
 import sys
