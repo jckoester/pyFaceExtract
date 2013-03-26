@@ -1,7 +1,7 @@
 #! /bin/python
 
 #contactsfile = "/home/jan/.wine/drive_c/users/jan/Local Settings/Application Data/Google/Picasa2/contacts/contacts.xml"
-contactsfile = "/home/jan/Dokumente/Programmieren/pyFaceExtract/test/contacts.xml"
+contactsfile = "/home/jan/Dokumente/Programmieren/faceextract/test/contacts.xml"
 
 #System environment
 import sys
@@ -81,6 +81,14 @@ def writeNamesToFiles(imgs, path):
         names = sep.join(imgs[item])
         if len(names) > 0 :
             print names
+            args="-xmp:PersonInImage=\""+names+"\" "+filepath
+            print args
+
+            with exiftool.ExifTool() as et:
+                et.start()                
+                et.execute(args)
+                
+            #print metadata
     return
 
 
@@ -103,11 +111,6 @@ if len(sys.argv) > 1:
             #create list entry for this image
             imgs[item]=[]
 
-            
-            #with exiftool.ExifTool() as et:
-            #    metadata = et.get_metadata(filepath)
-           
-            #print metadata
             try:
                 #take all faces detected in this image
                 faces = config.get(item, 'faces').split(';')
