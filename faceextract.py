@@ -8,8 +8,12 @@ import sys
 import os
 import ConfigParser
 import string
+import ast
+import types
 #use pyexiftool
 from lib.pyexiftool_settags import exiftool
+
+keyword_prefix="Personen|Menschen|"
 
 #Found here: https://sites.google.com/site/picasafacenetwork/home
 #not tested yet
@@ -73,16 +77,46 @@ def createNameList(contactsfile):
 #This function saves the names to the images (xmp:Name)
 def writeNamesToFiles(imgs, path):
     directory = os.path.dirname(path)
+    print "Write procedure called"
+
 
     for item in imgs:
         filepath = os.path.join(directory, item)
         print filepath
+        #read old keywords from file
+        with exiftool.ExifTool() as et:
+            keywords = et.get_tags({"XMP:HierarchicalSubject"}, filepath)
+            #print type(keywords)
+            if("XMP:HierarchicalSubject") in keywords.keys():
+                keywords = keywords['XMP:HierarchicalSubject']
+#                print type(keywords)
+                if not isinstance(keywords, types.ListType):
+#                    print "miep"
+#                    print keywords
+#                    keywords=ast.literal_eval(keywords)
+                    keywords=keywords.split(', ')
+#                    print type(keywords)
+            else:
+                keywords=list()
+
+
         sep=", "
         names = sep.join(imgs[item])
+
+        #print keywords
+        for name in imgs[item]:
+            name=keyword_prefix+name
+            if not name in keywords:
+                keywords.append(name)
+
+#        print keywords
+        keywords_str=sep.join(keywords)
+        #print names
+        #return
         if len(names) > 0 :
-            print names
-            args={"xmp:PersonInImage":names}
-            print args
+            #print names
+            args={"xmp:PersonInImage":names, "xmp:HierarchicalSubject":keywords_str}
+#            print args
 
             with exiftool.ExifTool() as et:
                 #et.start()                
